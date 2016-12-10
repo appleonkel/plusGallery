@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>plusGallery example</title>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="css/jquery.plusgallery.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.plusGallery.js"></script>
+</head>
+<body>
+<div class="content" style="width: 600px;">
+  <h1>plusGallery example</h1>
+  <div class="myplusgallery" style="position: relative;">
+    <div class="img-prev" title="Previous Image">&#8249;</div>
+    <div class="img-next" title="Next Image">&#8250;</div>
+    <div class="img-overlay">
+      <p>Some nice pictures from <br>
+      <a href="http://www.deviantart.com">deviantart.com</a></p>
+    </div>
+    <div class="img-slide">
+      <figure>
+        <img src="http://img10.deviantart.net/8dd6/i/2016/344/e/5/end_of_days_by_tacosauceninja-dar6in5.jpg" alt="End of Days" />
+      </figure>
+      <figure>
+        <img src="http://orig09.deviantart.net/f2b5/f/2016/344/8/f/technical_department__by_crist_jroger-dar782h.jpg" alt="Technical Department" />
+      </figure>
+      <figure>
+        <img src="http://orig14.deviantart.net/f951/f/2007/343/3/3/the_music_nature_by_ethernity.jpg" alt="The music nature" />
+      </figure>
+      <figure>
+        <img src="http://orig11.deviantart.net/8c5c/f/2016/344/6/5/inktober_glow_lowres_2_by_ingridtan-dar56m5.jpg" alt="Glow" />
+      </figure>
+      <figure>
+        <img src="http://orig08.deviantart.net/bc07/f/2012/145/9/7/scorched_earth_by_arcipello-d5118nz.jpg" alt="Scorched Earth" />
+      </figure>
+    </div>
+  </div>
+</div>
+  <script type="text/javascript">
+$(window).on('load', function() {
+    $('.myplusgallery').plusGallery({height: '350px'});
+});
+  </script>
+</body>
+</html>

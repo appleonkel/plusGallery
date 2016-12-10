@@ -1,0 +1,45 @@
+.img-slide {
+	overflow: hidden;
+	white-space: nowrap;
+	position: relative;
+	font-size: 0;
+}
+.img-slide figure {
+	display: inline-block;
+	position: relative;
+	transition: transform 0.5s;
+	white-space: nowrap;
+	margin: 0;
+}
+.img-slide img {
+	width: auto;
+	margin-left: 2px;
+	height: 300px;
+}
+.img-prev, .img-next {
+	font-size: 70px;
+	height: 100%;
+	position: absolute;
+	top: 0;
+	z-index: 4;
+	background: #000;
+	color: #fff;
+	opacity: .6;
+	padding: 0 10px;
+	display: none;
+	transition: transform 0.5s;
+}
+.img-prev, .img-next { cursor: pointer; }
+.img-prev {left:0}
+.img-next {right: 0}
+.img-overlay {
+	color: #FFF;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 0 50px 10px;
+	background-image: linear-gradient(to top,rgba(0,0,0,.75), transparent);
+	z-index: 1;
+}
+.img-overlay a {color: #FFF}
