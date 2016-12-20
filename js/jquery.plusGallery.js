@@ -4,28 +4,57 @@
 
     $.fn.plusGallery = function(options) {
         var $gallery = $(this);
-        var slideRange, totalWidth, maxPos, curPos;
+        var maxPos;
+        var curPos = 0;
 
-        curPos = 0;
+        function getTotalWidth() {
+            var totalWidth = 0;
+            $gallery.find('figure').each(function() {
+                totalWidth += parseInt($(this).width(), 10);
+            });
+            return totalWidth;
+        }
+        function getMaxPos() {
+            return getTotalWidth()-$gallery.width();
+        }
 
-        totalWidth = 0;
-        $gallery.find('figure').each(function() {
-            totalWidth += parseInt($(this).width(), 10);
-        });
-
-        slideRange = $gallery.width();
-        maxPos = totalWidth-slideRange;
+        function moveRight() {
+            totalWidth = getTotalWidth();
+            slideRange = $gallery.width();
+            maxPos = getMaxPos();
+            if ((curPos+slideRange) <= maxPos) {
+                curPos += slideRange;
+            } else {
+                curPos = maxPos;
+                $(this).hide();
+            }
+            $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
+        }
         
+        function moveLeft() {
+            totalWidth = getTotalWidth();
+            slideRange = $gallery.width();
+            maxPos = totalWidth-slideRange;
+
+            if ((curPos-slideRange) > 0) {
+                curPos -= slideRange;
+            } else {
+                curPos = 0;
+                $(this).hide();
+            }
+            $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
+        }
+
         /* Set line-height of the buttons to img height, so arrows are vertical-aligned */
         $('.img-prev, .img-next').css('line-height', $('.img-slide img').height()+'px');
 
         /* If there are not enough pictures to fill the gallery
          * arrange them in the middle */
-        if (slideRange > totalWidth) {
-            var offset = (slideRange-totalWidth)/2;
+        if ($gallery.width() > getTotalWidth()) {
+            var offset = ($gallery.width()-getTotalWidth())/2;
             var overlayPadding = parseInt($('.img-overlay').css('padding-left'), 10);
             $('figure', $gallery).css('transform', 'translate('+offset+'px, 0)');
-            $('.img-overlay').width(totalWidth-overlayPadding*2).css('left', offset+'px');
+            $('.img-overlay').width(getTotalWidth()-overlayPadding*2).css('left', offset+'px');
         }
 
         /* Mouse functions */
@@ -33,7 +62,7 @@
             if (curPos > 0) {
                 $('.img-prev').show('fast');
             }
-            if (curPos < maxPos) {
+            if (curPos < getMaxPos()) {
                 $('.img-next').show('fast');
             }
 
@@ -42,27 +71,21 @@
             $('.img-next').hide('fast');
         });
         $('.img-next').click(function() {
-            if ((curPos+slideRange) <= maxPos) {
-                curPos += slideRange;
-            } else {
-                curPos = maxPos;
-                $(this).hide();
-            }
-            $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
+            moveRight();
             if (curPos > 0) {
-                $('.img-prev').show();
+                $('.img-prev').show('fast');
+            }
+            if (curPos >= getMaxPos()) {
+                $(this).hide('fast');
             }
         });
         $('.img-prev').click(function() {
-            if ((curPos-slideRange) > 0) {
-                curPos -= slideRange;
-            } else {
-                curPos = 0;
-                $(this).hide();
-            }
-            $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
-            if (curPos < maxPos) {
+            moveLeft();
+            if (curPos < getMaxPos()) {
                 $('.img-next').show('fast');
+            }
+            if (curPos <= 0) {
+                $(this).hide('fast');
             }
         });
 
@@ -77,20 +100,9 @@
         });
         $gallery.bind('touchend', function(e) {
             if (touchX-curX > 75) {
-                if ((curPos+slideRange) <= maxPos) {
-                    curPos += slideRange;
-                } else {
-                    curPos = maxPos;
-                }
-                $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
-                console.log('right');
+                moveRight();
             } else if (touchX-curX < -75) {
-                if ((curPos-slideRange) > 0) {
-                    curPos -= slideRange;
-                } else {
-                    curPos = 0;
-                }
-                $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
+                moveLeft();
             }
         });
     };
