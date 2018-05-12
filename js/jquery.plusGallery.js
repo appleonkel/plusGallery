@@ -18,9 +18,8 @@
             return getTotalWidth()-$gallery.width();
         }
 
-        function moveRight() {
+        function moveRight(slideRange) {
             totalWidth = getTotalWidth();
-            slideRange = $gallery.width();
             maxPos = getMaxPos();
             if ((curPos+slideRange) <= maxPos) {
                 curPos += slideRange;
@@ -31,9 +30,8 @@
             $('figure', $gallery).css('transform', 'translate(-'+curPos+'px, 0)');
         }
         
-        function moveLeft() {
+        function moveLeft(slideRange) {
             totalWidth = getTotalWidth();
-            slideRange = $gallery.width();
             maxPos = totalWidth-slideRange;
 
             if ((curPos-slideRange) > 0) {
@@ -71,7 +69,7 @@
             $('.img-next').hide('fast');
         });
         $('.img-next').click(function() {
-            moveRight();
+            moveRight($gallery.width());
             if (curPos > 0) {
                 $('.img-prev').show('fast');
             }
@@ -80,7 +78,7 @@
             }
         });
         $('.img-prev').click(function() {
-            moveLeft();
+            moveLeft($gallery.width());
             if (curPos < getMaxPos()) {
                 $('.img-next').show('fast');
             }
@@ -91,18 +89,21 @@
 
         /* Touchfunctions */
         var touchX;
-        $gallery.bind('touchstart', function(e) {
+        $gallery.bind('touchstart mousedown', function(e) {
+            console.log(e.type);
+            e.preventDefault();
             touchX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
         });
         var curX;
-        $gallery.bind('touchmove', function(e) {
+        $gallery.bind('touchmove mousemove', function(e) {
             curX = e.originalEvent.touches ? e.originalEvent.touches[0].pageX : e.pageX;
         });
-        $gallery.bind('touchend', function(e) {
-            if (touchX-curX > 75) {
-                moveRight();
-            } else if (touchX-curX < -75) {
-                moveLeft();
+        $gallery.bind('touchend mouseup', function(e) {
+            range = curX-touchX;
+            if (range < -50) {
+                moveRight(-range);
+            } else if (range > 50) {
+                moveLeft(range);
             }
         });
     };
